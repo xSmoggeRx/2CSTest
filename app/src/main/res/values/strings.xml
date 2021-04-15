@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">2Coders Studio Test</string>
     <string name="titleAppMainActivity">2Coders Studio TestApp</string>
+    <string name="poster_movie">Poster Movie</string>
 </resources>
