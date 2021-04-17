@@ -5,4 +5,5 @@ object HttpConstants {
     val urlRoot = "https://api.themoviedb.org/3/movie/"
     val imageUrlRoot = "https://image.tmdb.org/t/p/w500/"
     val popularMoviesURL = "popular"
+    val pageParam = "&page="
 }

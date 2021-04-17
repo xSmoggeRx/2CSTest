@@ -1,13 +1,16 @@
 package com.example.a2codersstudiotest.Views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.a2codersstudiotest.APIConfig.APIService
 import com.example.a2codersstudiotest.Constants.HttpConstants
+import com.example.a2codersstudiotest.Controllers.MainActivityController
 import com.example.a2codersstudiotest.Models.Movie
 import com.example.a2codersstudiotest.Models.MovieAdapter
 import com.example.a2codersstudiotest.Models.TheMovieDBResponse
@@ -22,48 +25,42 @@ class MainActivity : AppCompatActivity() {
 
     //Se declara la variable binding que se usará para poder acceder a los views de las activities sin estar usando el findElementById tan tedioso.
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: MovieAdapter
-    private val movieList = mutableListOf<Movie>()
+    lateinit var adapter: MovieAdapter
+    val movieList = mutableListOf<Movie>()
+    lateinit var mainActivityController: MainActivityController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivityController =  MainActivityController(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecyclerView()
     }
 
     private fun initRecyclerView() {
-        adapter = MovieAdapter(movieList)
+        adapter = MovieAdapter(movieList, mainActivityController)
         binding.recyclerViewMovies.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewMovies.adapter = adapter
-        askForPopularMovies()
-    }
+        mainActivityController.askForPopularMovies(true)
 
-    private fun getRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(HttpConstants.urlRoot)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    private fun askForPopularMovies() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(APIService::class.java).getMovies(HttpConstants.popularMoviesURL + HttpConstants.api_key_param)
-            val theMovieDBResponse: TheMovieDBResponse? = call.body()
-            runOnUiThread {
-                if (call.isSuccessful) { // TODO: manejar mejor los errores
-                    val movieListFromResponse: List<Movie> = theMovieDBResponse?.listOfMovies ?: emptyList() // Checkea si es nulo, de ser así se asigna una lista vacía, de no ser null se añade la nueva lista a la vista
-                    movieList.clear()
-                    movieList.addAll(movieListFromResponse)
-                    adapter.notifyDataSetChanged()
-                } else {
-                    showError()
+        binding.recyclerViewMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() { // se añade un listener para que cuando llegue al final del recycler view se llamen a más datos.
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val totalItemCount = recyclerView.layoutManager!!.itemCount
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    mainActivityController.askForPopularMovies(false)
                 }
             }
-        }
+        })
     }
 
-    private fun showError() { // TODO: Manejar mejor los errores
-        Toast.makeText(this, "ERROR", Toast.LENGTH_LONG).show()
+    fun openDetailsActivity(title: String, urlImage: String, overview: String) {
+        val myBundle: Bundle = Bundle()
+        myBundle.putString("title", title)
+        myBundle.putString("urlImage", urlImage)
+        myBundle.putString("overview", overview)
+        val myIntent = Intent(this, DetailsActivity::class.java)
+        myIntent.putExtras(myBundle)
+        startActivity(myIntent)
     }
 }
