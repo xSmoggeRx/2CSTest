@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-    //Se declara la variable binding que se usará para poder acceder a los views de las activities sin estar usando el findElementById tan tedioso.
+    // Binding is declared to access activity views instead of using findElementById
     private lateinit var binding: ActivityMainBinding
     lateinit var adapter: MovieAdapter
     val movieList = mutableListOf<Movie>()
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerViewMovies.adapter = adapter
         mainActivityController.askForPopularMovies(true)
 
-        binding.recyclerViewMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() { // se añade un listener para que cuando llegue al final del recycler view se llamen a más datos.
+        binding.recyclerViewMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() { // Listener is added to trigger a function when the scroll reach the end
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 val totalItemCount = recyclerView.layoutManager!!.itemCount

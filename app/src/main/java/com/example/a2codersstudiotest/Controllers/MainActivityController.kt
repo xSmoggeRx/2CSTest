@@ -30,7 +30,7 @@ class MainActivityController(viewActivity: MainActivity) {
                 .build()
     }
 
-    fun askForPopularMovies(isFirstTime: Boolean) {
+    fun askForPopularMovies(isFirstTime: Boolean) { // fetch movie data from the api by popular
         if(!isFirstTime) {
             page ++
         }
@@ -40,7 +40,7 @@ class MainActivityController(viewActivity: MainActivity) {
                 val theMovieDBResponse: TheMovieDBResponse? = call.body()
                 mainActivity.runOnUiThread {
                     if (call.isSuccessful) {
-                        val movieListFromResponse: List<Movie> = theMovieDBResponse?.listOfMovies ?: emptyList() // Checkea si es nulo, de ser así se asigna una lista vacía, de no ser null se añade la nueva lista a la vista
+                        val movieListFromResponse: List<Movie> = theMovieDBResponse?.listOfMovies ?: emptyList() // Check if is null, in that case empty list is assign, otherwise we add the new list.
                         mainActivity.movieList.addAll(movieListFromResponse)
                         mainActivity.adapter.notifyDataSetChanged()
                     } else {
@@ -60,7 +60,6 @@ class MainActivityController(viewActivity: MainActivity) {
     }
 
     fun openMovieDetails(title: String, urlImage: String, overview: String) {
-        Toast.makeText(mainActivity.applicationContext, title, Toast.LENGTH_LONG).show()
         mainActivity.openDetailsActivity(title, urlImage, overview)
     }
 }
