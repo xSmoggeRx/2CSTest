@@ -17,7 +17,6 @@ class MovieViewHolder(view: View, mainActivityController: MainActivityController
     fun bind(movie: Movie){
         binding.movieTitle.text = movie.title
         Picasso.get().load(HttpConstants.imageUrlRoot + movie.poster_path).into(binding.movieImg)
-        Log.d("testing size", HttpConstants.imageUrlRoot + movie.poster_path)
         binding.movieOverview.text = movie.overview
 
         binding.cardView.setOnClickListener {

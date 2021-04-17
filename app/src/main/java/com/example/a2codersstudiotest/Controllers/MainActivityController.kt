@@ -34,12 +34,10 @@ class MainActivityController(viewActivity: MainActivity) {
         if(!isFirstTime) {
             page ++
         }
-        Log.d("testing bug", "llega a entrar al coroutine")
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val call = getRetrofit().create(APIService::class.java).getMovies(HttpConstants.popularMoviesURL + HttpConstants.api_key_param + HttpConstants.pageParam + page)
                 val theMovieDBResponse: TheMovieDBResponse? = call.body()
-                Log.d("testing bug", "llega a entrar al try")
                 mainActivity.runOnUiThread {
                     if (call.isSuccessful) {
                         val movieListFromResponse: List<Movie> = theMovieDBResponse?.listOfMovies ?: emptyList() // Checkea si es nulo, de ser así se asigna una lista vacía, de no ser null se añade la nueva lista a la vista

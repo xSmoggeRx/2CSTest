@@ -24,10 +24,11 @@
         android:textSize="24sp"
         android:textAlignment="center"
         android:text="TextView"
-        android:layout_margin="12dp"
+        android:layout_margin="8dp"
         android:gravity="center_horizontal" />
 
     <TextView
+        android:scrollbars="vertical"
         android:id="@+id/overviewMovie"
         android:layout_margin="12dp"
         android:textSize="18sp"

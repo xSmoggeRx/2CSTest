@@ -1,12 +1,11 @@
 package com.example.a2codersstudiotest.Views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.example.a2codersstudiotest.Constants.HttpConstants
-import com.example.a2codersstudiotest.R
+import android.text.method.ScrollingMovementMethod
+import androidx.appcompat.app.AppCompatActivity
 import com.example.a2codersstudiotest.databinding.ActivityDetailsBinding
 import com.squareup.picasso.Picasso
+
 
 class DetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailsBinding
@@ -22,6 +21,8 @@ class DetailsActivity : AppCompatActivity() {
         binding.titleMovie.text = title
         binding.overviewMovie.text = overview
         Picasso.get().load(urlImage).into(binding.detailsImage)
+        binding.overviewMovie.movementMethod = ScrollingMovementMethod()
+
 
     }
 }
